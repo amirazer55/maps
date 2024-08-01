@@ -1,11 +1,7 @@
 import React from "react";
 import { Dialog } from "primereact/dialog";
-import { Location } from "../../hooks/useLocations";
+import { LocationDetailsDialogProps } from "../../interfaces/locationDetails.interface";
 
-interface LocationDetailsDialogProps {
-  popupInfo: Location | null;
-  onHide: () => void;
-}
 
 const LocationDetailsDialog: React.FC<LocationDetailsDialogProps> = ({
   popupInfo,

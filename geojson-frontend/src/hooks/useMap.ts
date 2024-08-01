@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import mapboxgl, { GeoJSONSource, LngLatLike } from "mapbox-gl";
-import { Location } from "./useLocations";
+import { Location } from "../interfaces/location.interface";
 
 mapboxgl.accessToken =
   "pk.eyJ1IjoiYXplcjU1NSIsImEiOiJjbHo1Y2p3MTkzYXAxMmtzZ3p3NGhoY3RjIn0.XnW4oIxvCHcfBPleMPAR_w";
@@ -38,7 +38,8 @@ export const useMap = (allLocations: Location[]) => {
       container: "map",
       style: "mapbox://styles/mapbox/dark-v10",
       center: [0, 0] as LngLatLike,
-      zoom: 1,
+      zoom: 2,
+      projection: 'globe', 
       maxBounds: [
         [-180, -90],
         [180, 90],
@@ -136,7 +137,6 @@ export const useMap = (allLocations: Location[]) => {
           );
           return distance <= 1000;
         });
-
 
         source.setData({
           type: "FeatureCollection",

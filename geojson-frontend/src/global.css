@@ -1,5 +1,5 @@
 body {
-  background-color: white;
+  background-color: lightgray;
   color: black;
   font-family: Arial, sans-serif;
 }
@@ -7,14 +7,10 @@ body {
 .App {
   padding: 20px;
 }
-
-input.p-inputtext,
-input.p-inputnumber-input {
-  background-color: lightgray;
-  color: black;
-  border-radius: 15px;
-  margin: 0px 10px 10px 10px;
+.p-column-filter-menu{
+  margin: 10px 0px 0px 7px;
 }
+
 .p-datatable > .p-datatable-wrapper {
   overflow: auto;
   border-radius: 15px;
