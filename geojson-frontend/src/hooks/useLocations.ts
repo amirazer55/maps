@@ -9,7 +9,7 @@ export interface Location {
   };
   properties: {
     id: string;
-    name: string; 
+    name: string;
     score: number;
     address: string;
     country?: string;
@@ -21,7 +21,6 @@ export interface Location {
 
 export const useLocations = (initialPage = 1, initialLimit = 10) => {
   const [locations, setLocations] = useState<Location[]>([]);
-  console.log("🚀 ~ useLocations ~ locations:", locations)
   const [filteredLocations, setFilteredLocations] = useState<Location[]>([]);
   const [total, setTotal] = useState(0);
   const [currentPage, setCurrentPage] = useState(initialPage);
@@ -38,7 +37,7 @@ export const useLocations = (initialPage = 1, initialLimit = 10) => {
   useEffect(() => {
     fetchLocations(currentPage, rowsPerPage)
       .then((data) => {
-        setLocations(data.features);
+        setLocations(data.allFeatures);
         setTotal(data.total);
       })
       .catch((error) => console.error("Error fetching locations:", error));
@@ -78,7 +77,6 @@ export const useLocations = (initialPage = 1, initialLimit = 10) => {
   }, [locations, filters, sort]);
 
   const handlePageChange = (event: { first: number; rows: number }) => {
-    console.log('1')
     const page = Math.floor(event.first / event.rows) + 1;
     setCurrentPage(page);
     setRowsPerPage(event.rows);

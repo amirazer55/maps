@@ -24,9 +24,7 @@ const DataTableComponent: React.FC<DataTableComponentProps> = ({
   setSort,
   sort,
 }) => {
-  console.log("🚀 ~ locations:", locations)
   
-  console.log("🚀 ~ total:", total)
   const onSort = (e: any) => {
     const field = e.sortField || sort.field;
     const order = e.sortOrder === 1 ? "asc" : "desc";
