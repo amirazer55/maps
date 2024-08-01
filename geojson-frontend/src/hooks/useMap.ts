@@ -10,7 +10,7 @@ const haversineDistance = (
   coords2: [number, number]
 ) => {
   const toRad = (x: number) => (x * Math.PI) / 180;
-  const R = 6371; // Earth’s mean radius in kilometers
+  const R = 6371;
   const dLat = toRad(coords2[1] - coords1[1]);
   const dLng = toRad(coords2[0] - coords1[0]);
   const a =
@@ -24,7 +24,7 @@ const haversineDistance = (
 };
 
 export const useMap = (
-  allLocations: Location[] // Use all locations
+  allLocations: Location[]
 ) => {
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
   const [popupInfo, setPopupInfo] = useState<Location | null>(null);
@@ -40,11 +40,12 @@ export const useMap = (
       container: "map",
       style: "mapbox://styles/mapbox/dark-v10",
       center: [0, 0] as LngLatLike,
-      zoom: 2,
+      zoom: 1,
+      projection: 'globe', 
       maxBounds: [
         [-180, -90],
         [180, 90],
-      ], // Constrain the map to the single world copy
+      ],
     });
 
     map.on("load", () => {
