@@ -3,7 +3,7 @@ import { randomBytes } from "crypto";
 import { faker } from "@faker-js/faker";
 import cors from "cors";
 const app = express();
-const port = 3015;
+const port = 3044;
 
 app.use(cors());
 
