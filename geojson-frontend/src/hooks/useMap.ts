@@ -1,52 +1,24 @@
 import { useState, useEffect } from "react";
-import mapboxgl, { GeoJSONSource, LngLatLike } from "mapbox-gl";
+import mapboxgl, { GeoJSONSource } from "mapbox-gl";
 import { Location } from "../interfaces/location.interface";
+import { haversineDistance } from "../utils/haversineDistance";
+import { initializeMap } from "../utils/mapUtils";
 
-mapboxgl.accessToken =
-  "pk.eyJ1IjoiYXplcjU1NSIsImEiOiJjbHo1Y2p3MTkzYXAxMmtzZ3p3NGhoY3RjIn0.XnW4oIxvCHcfBPleMPAR_w";
 
-const haversineDistance = (
-  coords1: [number, number],
-  coords2: [number, number]
-) => {
-  const toRad = (x: number) => (x * Math.PI) / 180;
-  const R = 6371;
-  const dLat = toRad(coords2[1] - coords1[1]);
-  const dLng = toRad(coords2[0] - coords1[0]);
-  const a =
-    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-    Math.cos(toRad(coords1[1])) *
-      Math.cos(toRad(coords2[1])) *
-      Math.sin(dLng / 2) *
-      Math.sin(dLng / 2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-  return R * c;
-};
-
+// Custom hook to handle Mapbox map initialization and interactions
 export const useMap = (allLocations: Location[]) => {
-  const [map, setMap] = useState<mapboxgl.Map | null>(null);
-  const [popupInfo, setPopupInfo] = useState<Location | null>(null);
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
-    null
-  );
-  const [currentLocation, setCurrentLocation] = useState<
-    [number, number] | null
-  >(null);
+  const [map, setMap] = useState<mapboxgl.Map | null>(null); // State for the Mapbox map instance
+  const [popupInfo, setPopupInfo] = useState<Location | null>(null); // State for the popup information
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null); // State for the selected location
+  const [currentLocation, setCurrentLocation] = useState<[number, number] | null>(null); // State for the current user location
+  const [loading, setLoading] = useState<boolean>(true); // Add loading state
 
   useEffect(() => {
-    const map = new mapboxgl.Map({
-      container: "map",
-      style: "mapbox://styles/mapbox/dark-v10",
-      center: [0, 0] as LngLatLike,
-      zoom: 2,
-      projection: 'globe', 
-      maxBounds: [
-        [-180, -90],
-        [180, 90],
-      ],
-    });
-
+    // Initialize the map and add sources/layers on load
+    const map = initializeMap("map");
+    
     map.on("load", () => {
+      // Add source and layer for locations
       map.addSource("locations", {
         type: "geojson",
         data: { type: "FeatureCollection", features: [] },
@@ -62,6 +34,7 @@ export const useMap = (allLocations: Location[]) => {
         },
       });
 
+      // Add source and layer for the current location
       map.addSource("current-location", {
         type: "geojson",
         data: { type: "FeatureCollection", features: [] },
@@ -77,12 +50,14 @@ export const useMap = (allLocations: Location[]) => {
         },
       });
 
+      // Get the current user location using the Geolocation API
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { longitude, latitude } = position.coords;
           setCurrentLocation([longitude, latitude]);
           map.setCenter([longitude, latitude]);
 
+          // Update the current location source with the user's coordinates
           const source = map.getSource("current-location") as GeoJSONSource;
           source.setData({
             type: "FeatureCollection",
@@ -102,17 +77,20 @@ export const useMap = (allLocations: Location[]) => {
         { enableHighAccuracy: true }
       );
 
+      // Change cursor to pointer when hovering over locations
       map.on("mouseenter", "locations", () => {
         map.getCanvas().style.cursor = "pointer";
       });
 
+      // Revert cursor when not hovering over locations
       map.on("mouseleave", "locations", () => {
         map.getCanvas().style.cursor = "";
       });
 
-      setMap(map);
+      setMap(map); // Set the map instance in state
     });
 
+    // Handle click events on locations to show a popup and fly to the location
     map.on("click", "locations", (e) => {
       if (e.features && e.features.length > 0) {
         const feature = e.features[0] as any;
@@ -123,10 +101,12 @@ export const useMap = (allLocations: Location[]) => {
       }
     });
 
+    // Clean up map instance on component unmount
     return () => map.remove();
   }, []);
 
   useEffect(() => {
+    // Update locations on the map when allLocations or currentLocation change
     if (map && currentLocation) {
       const source = map.getSource("locations") as GeoJSONSource;
       if (source && source.setData) {
@@ -135,18 +115,21 @@ export const useMap = (allLocations: Location[]) => {
             currentLocation,
             location.geometry.coordinates
           );
-          return distance <= 1000;
+          return distance <= 1000; // Filter locations within 1000 km
         });
 
         source.setData({
           type: "FeatureCollection",
           features: filtered,
         });
+        setLoading(false); // Set loading to false once data is fetched
+
       }
     }
   }, [allLocations, map, currentLocation]);
 
   useEffect(() => {
+    // Show a popup for the selected location and fly to it
     if (map && selectedLocation) {
       const popup = new mapboxgl.Popup({ closeOnClick: false })
         .setLngLat(selectedLocation.geometry.coordinates)
@@ -165,5 +148,5 @@ export const useMap = (allLocations: Location[]) => {
     }
   }, [selectedLocation, map]);
 
-  return { map, popupInfo, setPopupInfo, setSelectedLocation };
+  return { map, popupInfo, setPopupInfo, setSelectedLocation,loading };
 };

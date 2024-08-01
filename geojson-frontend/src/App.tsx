@@ -8,16 +8,12 @@ import "primereact/resources/themes/saga-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 
 const App: React.FC = () => {
-  const {
-    locations,
-    handleListItemClick,
-    popupInfo,
-    setPopupInfo,
-  } = useAppLogic();
+  const { locations, handleListItemClick, popupInfo, setPopupInfo } =
+    useAppLogic();
 
   return (
     <div className="App">
-      <MapComponent />
+      <MapComponent locations={locations} />
       <div className="content">
         <DataTableComponent
           locations={locations}

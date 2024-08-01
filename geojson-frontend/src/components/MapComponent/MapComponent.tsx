@@ -1,11 +1,25 @@
 import React from "react";
+import { ProgressSpinner } from "primereact/progressspinner";
 
-const MapComponent: React.FC = () => {
+import { useMap } from "../../hooks/useMap";
+import { MapComponentProps } from "../../interfaces/map.interface";
+
+import "primereact/resources/themes/saga-blue/theme.css";
+import "primereact/resources/primereact.min.css";
+import "primeicons/primeicons.css";
+
+const MapComponent: React.FC<MapComponentProps> = ({ locations }) => {
+  const { loading } = useMap(locations);
+
   return (
-    <div
-      id="map"
-      style={{ height: "50vh", width: "100%", borderRadius: "15px" }}
-    ></div>
+    <div>
+      {loading && (
+        <div className="loader-container">
+          <ProgressSpinner />
+        </div>
+      )}
+      <div id="map" style={{ height: "500px", width: "100%" }} />
+    </div>
   );
 };
 

@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import { fetchLocations } from "../services/fetchLocations";
+import { fetchLocations } from "../api/fetchLocations";
 import { Location } from "../interfaces/location.interface";
 
-export const useLocations = (initialPage = 1, initialLimit = 10) => {
+export const useLocations = () => {
   const [locations, setLocations] = useState<Location[]>([]);
 
   useEffect(() => {

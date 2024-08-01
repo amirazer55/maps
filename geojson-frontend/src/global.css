@@ -7,7 +7,7 @@ body {
 .App {
   padding: 20px;
 }
-.p-column-filter-menu{
+.p-column-filter-menu {
   margin: 10px 0px 0px 7px;
 }
 
@@ -34,6 +34,10 @@ button,
 
 .mapboxgl-popup-close-button {
   background-color: black;
+}
+.mapboxgl-popup-close-button:hover {
+  background-color: black;
+  /* Ensure the background color stays black on hover */
 }
 
 .sort-icon {
@@ -70,4 +74,11 @@ button,
   background-color: lightgray;
   color: black;
   border-radius: 10px;
+}
+.loader-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 999;
 }

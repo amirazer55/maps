@@ -1,12 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { InputText } from "primereact/inputtext";
-import "primeicons/primeicons.css";
-
 import { FilterMatchMode } from "primereact/api";
+
 import { DataTableComponentProps } from "../../interfaces/dataTable.interface";
 import { Location } from "../../interfaces/location.interface";
+import "primeicons/primeicons.css";
+
 const DataTableComponent: React.FC<DataTableComponentProps> = ({
   locations,
   onListItemClick,

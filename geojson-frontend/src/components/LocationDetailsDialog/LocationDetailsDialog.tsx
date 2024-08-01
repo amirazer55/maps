@@ -2,7 +2,6 @@ import React from "react";
 import { Dialog } from "primereact/dialog";
 import { LocationDetailsDialogProps } from "../../interfaces/locationDetails.interface";
 
-
 const LocationDetailsDialog: React.FC<LocationDetailsDialogProps> = ({
   popupInfo,
   onHide,
@@ -17,13 +16,10 @@ const LocationDetailsDialog: React.FC<LocationDetailsDialogProps> = ({
     >
       {popupInfo && (
         <div>
-          <h3>{popupInfo.properties.name}</h3>
-          <p>Score: {popupInfo.properties.score}</p>
+          <h3>ID: {popupInfo.properties.id}</h3>
+          <p>Score: {popupInfo.properties.name}</p>
           <p>Address: {popupInfo.properties.address}</p>
-          <p>Country: {popupInfo.properties.country}</p>
-          <p>State: {popupInfo.properties.state}</p>
-          <p>Site Type: {popupInfo.properties.siteType}</p>
-          <p>Score: {popupInfo.properties.priorityScore}</p>
+          <p>Country: {popupInfo.properties.score}</p>
         </div>
       )}
     </Dialog>
