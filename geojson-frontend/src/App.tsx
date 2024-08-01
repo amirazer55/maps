@@ -24,9 +24,7 @@ const App: React.FC = () => {
     popupInfo,
     setPopupInfo,
   } = useAppLogic();
-    console.log("🚀 ~ total:", total)
-    console.log("🚀 ~ rowsPerPage:", rowsPerPage)
-    console.log("🚀 ~ currentPage:", currentPage)
+
 
   return (
     <div className="App">

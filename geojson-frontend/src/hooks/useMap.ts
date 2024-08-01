@@ -23,9 +23,7 @@ const haversineDistance = (
   return R * c;
 };
 
-export const useMap = (
-  allLocations: Location[]
-) => {
+export const useMap = (allLocations: Location[]) => {
   const [map, setMap] = useState<mapboxgl.Map | null>(null);
   const [popupInfo, setPopupInfo] = useState<Location | null>(null);
   const [selectedLocation, setSelectedLocation] = useState<Location | null>(
@@ -41,7 +39,6 @@ export const useMap = (
       style: "mapbox://styles/mapbox/dark-v10",
       center: [0, 0] as LngLatLike,
       zoom: 1,
-      projection: 'globe', 
       maxBounds: [
         [-180, -90],
         [180, 90],
@@ -64,12 +61,41 @@ export const useMap = (
         },
       });
 
+      map.addSource("current-location", {
+        type: "geojson",
+        data: { type: "FeatureCollection", features: [] },
+      });
+
+      map.addLayer({
+        id: "current-location",
+        type: "circle",
+        source: "current-location",
+        paint: {
+          "circle-radius": 5,
+          "circle-color": "#FF0000",
+        },
+      });
+
       navigator.geolocation.getCurrentPosition(
         (position) => {
           const { longitude, latitude } = position.coords;
           setCurrentLocation([longitude, latitude]);
           map.setCenter([longitude, latitude]);
-          console.log("Current location set:", [longitude, latitude]);
+
+          const source = map.getSource("current-location") as GeoJSONSource;
+          source.setData({
+            type: "FeatureCollection",
+            features: [
+              {
+                type: "Feature",
+                geometry: {
+                  type: "Point",
+                  coordinates: [longitude, latitude],
+                },
+                properties: {},
+              },
+            ],
+          });
         },
         (error) => console.log(error),
         { enableHighAccuracy: true }
@@ -111,7 +137,6 @@ export const useMap = (
           return distance <= 1000;
         });
 
-        console.log("Filtered locations:", filtered);
 
         source.setData({
           type: "FeatureCollection",
