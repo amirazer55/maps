@@ -1,9 +1,9 @@
-import React, { useState } from "react";
+import React from "react";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
-import { InputText } from "primereact/inputtext";
-import { FilterMatchMode } from "primereact/api";
 
+import { useDataService } from "./useDataService";
+import { Header, GenericBodyTemplate } from "./renderingComponents";
 import { DataTableComponentProps } from "../../interfaces/dataTable.interface";
 import { Location } from "../../interfaces/location.interface";
 import "primeicons/primeicons.css";
@@ -12,72 +12,16 @@ const DataTableComponent: React.FC<DataTableComponentProps> = ({
   locations,
   onListItemClick,
 }) => {
-  const [first, setFirst] = useState(0);
-  const [rows, setRows] = useState(10);
-  const [filters, setFilters] = useState<any>({
-    global: { value: null, matchMode: FilterMatchMode.CONTAINS },
-    "properties.name": { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-    "properties.address": {
-      value: null,
-      matchMode: FilterMatchMode.STARTS_WITH,
-    },
-    "properties.score": { value: null, matchMode: FilterMatchMode.EQUALS },
-  });
-  const [sort, setSort] = useState<{ field: string; order: 1 | -1 }>({
-    field: "properties.name",
-    order: 1,
-  });
-  const [globalFilterValue, setGlobalFilterValue] = useState<string>("");
-
-  const onGlobalFilterChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    let _filters = { ...filters };
-    _filters.global.value = value;
-    setFilters(_filters);
-    setGlobalFilterValue(value);
-  };
-
-  const renderHeader = () => {
-    return (
-      <div className="flex justify-content-end">
-        <span className="p-input-icon-left">
-          <span
-            className="pi pi-search"
-            style={{ color: "black", marginRight: "10px" }}
-          ></span>
-          <InputText
-            value={globalFilterValue}
-            onChange={onGlobalFilterChange}
-            placeholder="Keyword Search"
-          />
-        </span>
-      </div>
-    );
-  };
-
-  const nameBodyTemplate = (rowData: Location) => {
-    return <span>{rowData.properties.name}</span>;
-  };
-
-  const scoreBodyTemplate = (rowData: Location) => {
-    return <span>{rowData.properties.score}</span>;
-  };
-
-  const addressBodyTemplate = (rowData: Location) => {
-    return <span>{rowData.properties.address}</span>;
-  };
-
-  const header = renderHeader();
-
-  const onSort = (e: any) => {
-    const { sortField, sortOrder } = e;
-    setSort({ field: sortField, order: sortOrder });
-  };
-
-  const onPageChange = (event: { first: number; rows: number }) => {
-    setFirst(event.first);
-    setRows(event.rows);
-  };
+  const {
+    first,
+    rows,
+    filters,
+    sort,
+    globalFilterValue,
+    onGlobalFilterChange,
+    onSort,
+    onPageChange,
+  } = useDataService();
 
   return (
     <div>
@@ -95,7 +39,12 @@ const DataTableComponent: React.FC<DataTableComponentProps> = ({
         sortOrder={sort.order}
         onSort={onSort}
         filters={filters}
-        header={header}
+        header={
+          <Header
+            globalFilterValue={globalFilterValue}
+            onGlobalFilterChange={onGlobalFilterChange}
+          />
+        }
         globalFilterFields={[
           "properties.name",
           "properties.address",
@@ -109,15 +58,19 @@ const DataTableComponent: React.FC<DataTableComponentProps> = ({
           sortable
           filter
           filterPlaceholder="Search by name"
-          body={nameBodyTemplate}
+          body={(rowData) => (
+            <GenericBodyTemplate rowData={rowData} field="name" />
+          )}
         />
         <Column
           field="properties.address"
           header="Address"
           sortable
           filter
-          filterPlaceholder="Search by adress"
-          body={addressBodyTemplate}
+          filterPlaceholder="Search by address"
+          body={(rowData) => (
+            <GenericBodyTemplate rowData={rowData} field="address" />
+          )}
         />
         <Column
           field="properties.score"
@@ -125,7 +78,9 @@ const DataTableComponent: React.FC<DataTableComponentProps> = ({
           sortable
           filter
           filterPlaceholder="Search by Score"
-          body={scoreBodyTemplate}
+          body={(rowData) => (
+            <GenericBodyTemplate rowData={rowData} field="score" />
+          )}
         />
       </DataTable>
     </div>
