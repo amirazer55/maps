@@ -1,0 +1,46 @@
+.App {
+  font-family: Arial, sans-serif;
+  color: black;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+}
+
+#map {
+  height: 50vh;
+  width: 100%;
+}
+
+.content {
+  overflow: auto;
+  flex: 1;
+}
+
+.search-input {
+  width: 100%;
+  background: #333;
+  color: #fff;
+  border: 1px solid #444;
+  margin-bottom: 1rem;
+}
+
+.datatable {
+  background-color: #333;
+  color: #fff;
+}
+
+.datatable .p-datatable-thead > tr > th {
+  background: #444;
+  color: #fff;
+}
+
+.datatable .p-datatable-tbody > tr > td {
+  background: #222;
+  color: #fff;
+}
+
+.paginator {
+  margin-top: 1rem;
+}

@@ -1,0 +1,73 @@
+body {
+  background-color: white;
+  color: black;
+  font-family: Arial, sans-serif;
+}
+
+.App {
+  padding: 20px;
+}
+
+input.p-inputtext,
+input.p-inputnumber-input {
+  background-color: lightgray;
+  color: black;
+  border-radius: 15px;
+  margin: 0px 10px 10px 10px;
+}
+.p-datatable > .p-datatable-wrapper {
+  overflow: auto;
+  border-radius: 15px;
+}
+button,
+.p-button {
+  background-color: black;
+  color: white;
+  border-radius: 15px;
+  margin-bottom: 10px;
+  background: black;
+  border: 1px solid lightgray;
+}
+
+.sortable-header {
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  color: black;
+}
+
+.sort-icon {
+  width: 16px;
+  height: 16px;
+  margin-left: 5px;
+  fill: black;
+}
+
+.p-datatable {
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.p-datatable .p-datatable-tbody > tr {
+  background-color: black;
+  color: white;
+}
+
+.p-datatable .p-datatable-tbody > tr:nth-child(even) {
+  background-color: #333;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  background-color: lightgray;
+  color: black;
+}
+
+.p-datatable .p-datatable-tbody > tr:hover {
+  background-color: #555;
+}
+
+.p-paginator .p-paginator-pages .p-highlight {
+  background-color: lightgray;
+  color: black;
+  border-radius: 10px;
+}
