@@ -4,21 +4,22 @@ import { Location } from "../interfaces/location.interface";
 import { haversineDistance } from "../utils/haversineDistance";
 import { initializeMap } from "../utils/mapUtils";
 
-
-// Custom hook to handle Mapbox map initialization and interactions
 export const useMap = (allLocations: Location[]) => {
-  const [map, setMap] = useState<mapboxgl.Map | null>(null); // State for the Mapbox map instance
-  const [popupInfo, setPopupInfo] = useState<Location | null>(null); // State for the popup information
-  const [selectedLocation, setSelectedLocation] = useState<Location | null>(null); // State for the selected location
-  const [currentLocation, setCurrentLocation] = useState<[number, number] | null>(null); // State for the current user location
-  const [loading, setLoading] = useState<boolean>(true); // Add loading state
+  const [map, setMap] = useState<mapboxgl.Map | null>(null);
+  const [popupInfo, setPopupInfo] = useState<Location | null>(null);
+  const [selectedLocation, setSelectedLocation] = useState<Location | null>(
+    null
+  );
+  const [currentLocation, setCurrentLocation] = useState<
+    [number, number] | null
+  >(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Initialize the map and add sources/layers on load
     const map = initializeMap("map");
-    
+
     map.on("load", () => {
-      // Add source and layer for locations
+      // when the map load add source and layer for locations
       map.addSource("locations", {
         type: "geojson",
         data: { type: "FeatureCollection", features: [] },
@@ -57,7 +58,6 @@ export const useMap = (allLocations: Location[]) => {
           setCurrentLocation([longitude, latitude]);
           map.setCenter([longitude, latitude]);
 
-          // Update the current location source with the user's coordinates
           const source = map.getSource("current-location") as GeoJSONSource;
           source.setData({
             type: "FeatureCollection",
@@ -77,12 +77,10 @@ export const useMap = (allLocations: Location[]) => {
         { enableHighAccuracy: true }
       );
 
-      // Change cursor to pointer when hovering over locations
       map.on("mouseenter", "locations", () => {
         map.getCanvas().style.cursor = "pointer";
       });
 
-      // Revert cursor when not hovering over locations
       map.on("mouseleave", "locations", () => {
         map.getCanvas().style.cursor = "";
       });
@@ -101,12 +99,10 @@ export const useMap = (allLocations: Location[]) => {
       }
     });
 
-    // Clean up map instance on component unmount
-    return () => map.remove();
+    return () => map.remove(); // here we need to clean up the map instance on the unmounted compoenent
   }, []);
 
   useEffect(() => {
-    // Update locations on the map when allLocations or currentLocation change
     if (map && currentLocation) {
       const source = map.getSource("locations") as GeoJSONSource;
       if (source && source.setData) {
@@ -115,15 +111,14 @@ export const useMap = (allLocations: Location[]) => {
             currentLocation,
             location.geometry.coordinates
           );
-          return distance <= 1000; // Filter locations within 1000 km
+          return distance <= 1000; // Filter locations within 1000 km using haversine formula
         });
 
         source.setData({
           type: "FeatureCollection",
           features: filtered,
         });
-        setLoading(false); // Set loading to false once data is fetched
-
+        setLoading(false);
       }
     }
   }, [allLocations, map, currentLocation]);
@@ -148,5 +143,5 @@ export const useMap = (allLocations: Location[]) => {
     }
   }, [selectedLocation, map]);
 
-  return { map, popupInfo, setPopupInfo, setSelectedLocation,loading };
+  return { map, popupInfo, setPopupInfo, setSelectedLocation, loading };
 };
