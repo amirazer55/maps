@@ -20,6 +20,6 @@ runCommand("npm run build", frontendPath);
 runCommand("npm install", backendPath);
 
 runCommand(
-  'npx concurrently "npm start --prefix geojson-backend" "npm run build --prefix geojson-frontend"',
+  'npx concurrently "npm start --prefix geojson-backend" "npm run serve --prefix geojson-frontend"',
   __dirname
 );
