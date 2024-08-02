@@ -1,0 +1,12 @@
+{
+  "name": "geojson-app",
+  "version": "1.0.0",
+  "scripts": {
+    "start:frontend": "npm run start --prefix geojson-frontend",
+    "start:backend": "npm start --prefix geojson-backend",
+    "start:production": "node start-production.js"
+  },
+  "devDependencies": {
+    "concurrently": "8.2.2"
+  }
+}
