@@ -23,7 +23,7 @@ const generateRandomLocations = (num: number) => {
         id: randomBytes(16).toString("hex"),
         name: faker.location.city(),
         score: Math.floor(Math.random() * 101),
-        address: faker.streetAddress(),
+        address: faker.location.streetAddress(),
       },
     });
   }
