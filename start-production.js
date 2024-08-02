@@ -18,6 +18,7 @@ const backendPath = path.join(__dirname, "geojson-backend");
 runCommand("npm install", frontendPath);
 runCommand("npm run build", frontendPath);
 runCommand("npm install", backendPath);
+runCommand("npm run build", backendPath);
 
 runCommand(
   'npx concurrently "npm start --prefix geojson-backend" "npm run serve --prefix geojson-frontend"',
