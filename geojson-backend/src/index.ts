@@ -21,9 +21,9 @@ const generateRandomLocations = (num: number) => {
       },
       properties: {
         id: randomBytes(16).toString("hex"),
-        name: faker.address.city(),
+        name: faker.location.city(),
         score: Math.floor(Math.random() * 101),
-        address: faker.address.streetAddress(),
+        address: faker.streetAddress(),
       },
     });
   }
