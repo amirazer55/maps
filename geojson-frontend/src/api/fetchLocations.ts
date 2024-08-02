@@ -1,5 +1,5 @@
 const API_BASE_URL =
-  "https://testhell-hgksan5dj-amirazers-projects.vercel.app/";
+  "https://testhell-hgksan5dj-amirazers-projects.vercel.app";
 
 export const fetchLocations = async (page = 1, limit = 10) => {
   const response = await fetch(
