@@ -70,8 +70,9 @@ The frontend is built with React and TypeScript, using PrimeReact for UI compone
 
 ### Using Docker
 1. Build and run the containers:
-docker-compose -f docker-compose.dev.yml up --build
-docker-compose -f docker-compose.prod.yml up --build //for production
+`docker-compose -f docker-compose.dev.yml up --build`
+
+`docker-compose -f docker-compose.prod.yml up --build`  //for production
 
 2. Access the frontend at `http://localhost:3000`.
 3. Access the backend at `http://localhost:3044`.
